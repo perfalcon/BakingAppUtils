@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private class ResponseListener implements Response.Listener{
         @Override
         public void onResponse(Object response) {
-            Toast.makeText(getApplicationContext (),"Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
+            //Toast.makeText(getApplicationContext (),"Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
              mBaking= new GsonUtils ().populateBaking (response.toString ());
             displayBakingDetails();
         }

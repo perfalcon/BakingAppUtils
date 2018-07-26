@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.balav.bakingapp_utils.model.Baking;
+import com.example.balav.bakingapp_utils.model.Ingredient;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class DetailActivity extends AppCompatActivity {
     private static final String TAG = DetailActivity.class.getSimpleName();
@@ -26,21 +30,34 @@ public class DetailActivity extends AppCompatActivity {
         if (intent == null) {
             closeOnError ();
         }
-      /*  Bundle BundleBaking = intent.getBundleExtra (BUNDLE_KEY);
-        Baking baking = BundleBaking.getParcelable (BAKING_KEY);
-        if(baking == null){
-            closeOnError ();
-        }
-        Log.v (TAG,"Recipe Name -->"+baking.getName ());*/
+
+      Baking baking = intent.getParcelableExtra (BAKING_KEY);
+        Log.v(TAG,"baking--->"+baking);
+        Log.v (TAG,"Recipe Name -->"+baking.getName ());
         int baking_id = intent.getIntExtra (BAKING_ID,0);
-
-
         Log.v (TAG, "RECIPE CLICKED-->" + baking_id);
-        //bFav = intent.getStringExtra (OPTION_SELECTED).equals ("favorites");
-
+        populateUI(baking);
     }
     private void closeOnError() {
         finish();
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
+    }
+    private void populateUI(Baking mBaking){
+        TextView mRecipeName = (TextView) findViewById(R.id.tv_recipeName);
+        TextView mIngredients = (TextView) findViewById(R.id.tv_ingredients);
+        mRecipeName.setText(mBaking.getName ());
+        mIngredients.setText(prettyIngredients (mBaking.getIngredients ()));
+
+    }
+    private String prettyIngredients(List<Ingredient> ingredientList){
+        ListIterator it =ingredientList.listIterator ();
+        StringBuilder sb = new StringBuilder () ;
+
+        while(it.hasNext ()){
+            Ingredient ingredient =(Ingredient) it.next ();
+            Log.v(TAG,"ingredients-->"+ingredient.getIngredient ()+"|"+ingredient.getQuantity ()+ingredient.getMeasure ());
+            sb.append (ingredient.getIngredient ()+"|"+ingredient.getQuantity ()+ingredient.getMeasure ());
+        }
+        return sb.toString ();
     }
 }

@@ -75,11 +75,11 @@ public class RecipeAdapter extends RecyclerView.Adapter {
         }
         private void launchDetailActivity(int id) {
             Intent intent = new Intent(mContext, DetailActivity.class);
-           // intent.putParcelableArrayListExtra (DetailActivity.BAKING_KEY,(ArrayList)mBaking);
             intent.putExtra (DetailActivity.BAKING_ID,id);
-           /* Bundle bundle  = new Bundle ();
-            bundle.putParcelable (DetailActivity.RECIPE_KEY,mBaking.get(id));
-            intent.putExtra (DetailActivity.BUNDLE_KEY,bundle);*/
+
+            intent.putExtra(DetailActivity.BAKING_KEY,mBaking.get(id));
+            Log.v (TAG,"Recipe sending Object.."+mBaking.get (id));
+            Log.v (TAG,"Recipe sending ..."+mBaking.get (id).getName ());
             mContext.startActivity(intent);
         }
     }

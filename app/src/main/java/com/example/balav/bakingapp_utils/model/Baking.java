@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Baking{//} implements Parcelable {
+public class Baking implements Parcelable {
     int id;
     String name;
     List<Ingredient> ingredients ;
@@ -79,7 +79,7 @@ public class Baking{//} implements Parcelable {
     }
 
 
-   /* @Override
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -117,5 +117,5 @@ public class Baking{//} implements Parcelable {
         public Baking[] newArray(int size) {
             return new Baking[size];
         }
-    };*/
+    };
 }
