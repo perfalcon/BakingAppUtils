@@ -3,6 +3,7 @@ package com.example.balav.bakingapp_utils;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
@@ -37,6 +38,19 @@ public class DetailActivity extends AppCompatActivity {
         int baking_id = intent.getIntExtra (BAKING_ID,0);
         Log.v (TAG, "RECIPE CLICKED-->" + baking_id);
         populateUI(baking);
+
+
+        // Create a new recipeFragment
+        RecipeFragment recipeFragment = new RecipeFragment (baking);
+
+        // Add the fragment to its container using a FragmentManager and a Transaction
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .add(R.id.step_container, recipeFragment)
+                .commit();
+
+
     }
     private void closeOnError() {
         finish();
@@ -44,9 +58,10 @@ public class DetailActivity extends AppCompatActivity {
     }
     private void populateUI(Baking mBaking){
         TextView mRecipeName = (TextView) findViewById(R.id.tv_recipeName);
-        TextView mIngredients = (TextView) findViewById(R.id.tv_ingredients);
         mRecipeName.setText(mBaking.getName ());
-        mIngredients.setText(prettyIngredients (mBaking.getIngredients ()));
+        /*TextView mIngredients = (TextView) findViewById(R.id.tv_ingredients);
+
+        mIngredients.setText(prettyIngredients (mBaking.getIngredients ()));*/
 
     }
     private String prettyIngredients(List<Ingredient> ingredientList){
