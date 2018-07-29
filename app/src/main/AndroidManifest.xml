@@ -29,6 +29,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".RecipeStepsActivity"
+            android:label="Recipe Details"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.balav.bakingapp_utils.MainActivity" />
+        </activity>
+        <activity
+            android:name=".StepDetail"
+            android:label="Step Details"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.balav.bakingapp_utils.DetailActivity" />
+        </activity>
     </application>
 
 </manifest>

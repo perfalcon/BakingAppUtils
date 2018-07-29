@@ -8,9 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.balav.bakingapp_utils.model.Baking;
@@ -21,6 +24,7 @@ import java.util.List;
 import java.util.Random;
 
 public class RecipeFragment extends Fragment {
+    private static final String TAG = RecipeFragment.class.getSimpleName();
     private List<Step> mSteps;
     private Baking mBaking;
     public RecipeFragment(){
@@ -30,10 +34,9 @@ public class RecipeFragment extends Fragment {
 public RecipeFragment(Baking baking){
         mBaking = baking;
 }
-/*
 OnStepClickListener onStepClickListener;
     public interface OnStepClickListener{
-    void onStepSelected();
+    void onStepSelected(int position);
     }
 
     @Override
@@ -46,7 +49,7 @@ OnStepClickListener onStepClickListener;
                     +"must  implement OnStepClickListener");
         }
 
-    }*/
+    }
 
     @Nullable
     @Override
@@ -63,13 +66,20 @@ OnStepClickListener onStepClickListener;
             }
         });
 
-        RecyclerView rvStep = (RecyclerView)rootView.findViewById (R.id.rv_step);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager (container.getContext ());
+        final RecyclerView rvStep = (RecyclerView)rootView.findViewById (R.id.rv_step);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager (getContext ());
         rvStep.setLayoutManager (linearLayoutManager);
         rvStep.setHasFixedSize (true);
-        StepAdapter stepAdapter = new StepAdapter (mBaking.getSteps ());
+        final StepAdapter stepAdapter = new StepAdapter (mBaking.getSteps ());
         rvStep.setAdapter (stepAdapter);
+        rvStep.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG,"helloooo ");
 
+
+            }
+        });
         return rootView;
     }
 

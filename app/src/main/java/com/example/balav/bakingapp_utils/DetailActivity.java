@@ -12,21 +12,20 @@ import android.widget.Toast;
 import com.example.balav.bakingapp_utils.model.Baking;
 import com.example.balav.bakingapp_utils.model.Ingredient;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements RecipeFragment.OnStepClickListener {
     private static final String TAG = DetailActivity.class.getSimpleName();
     public static final String RECIPE_KEY= "recipe";
     public static final String BUNDLE_KEY="bundle";
     public static final String BAKING_KEY="baking";
     public static final String BAKING_ID="baking_id";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate (savedInstanceState);
-        setContentView (R.layout.recipe_detail);
+        setContentView (R.layout.activity_recipe_steps);
         Intent intent = getIntent ();
         if (intent == null) {
             closeOnError ();
@@ -74,5 +73,10 @@ public class DetailActivity extends AppCompatActivity {
             sb.append (ingredient.getIngredient ()+"|"+ingredient.getQuantity ()+ingredient.getMeasure ());
         }
         return sb.toString ();
+    }
+
+    @Override
+    public void onStepSelected(int position) {
+        Toast.makeText(this, "Position clicked = " + position, Toast.LENGTH_SHORT).show();
     }
 }

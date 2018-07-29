@@ -75,6 +75,8 @@ public class RecipeAdapter extends RecyclerView.Adapter {
         }
         private void launchDetailActivity(int id) {
             Intent intent = new Intent(mContext, DetailActivity.class);
+            //Intent intent = new Intent(mContext, RecipeStepsActivity.class);
+
             intent.putExtra (DetailActivity.BAKING_ID,id);
 
             intent.putExtra(DetailActivity.BAKING_KEY,mBaking.get(id));
