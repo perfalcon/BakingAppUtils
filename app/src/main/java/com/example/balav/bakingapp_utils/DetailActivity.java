@@ -21,24 +21,40 @@ public class DetailActivity extends AppCompatActivity implements RecipeFragment.
     public static final String BUNDLE_KEY="bundle";
     public static final String BAKING_KEY="baking";
     public static final String BAKING_ID="baking_id";
+    private  Baking baking;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState (outState);
+        Log.v (TAG, "Saving the State");
+        outState.putParcelable (BAKING_KEY,baking);
+
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_recipe_steps);
-        Intent intent = getIntent ();
-        if (intent == null) {
-            closeOnError ();
+
+        if(savedInstanceState != null) {
+            Log.v (TAG, "Restoring State");
+            if (savedInstanceState.containsKey (BAKING_KEY)) {
+                baking = savedInstanceState.getParcelable (BAKING_KEY);
+            }
+        }else{
+            Intent intent = getIntent ();
+            if (intent == null) {
+                closeOnError ();
+            }
+
+            baking = intent.getParcelableExtra (BAKING_KEY);
+            Log.v(TAG,"baking--->"+baking);
+            Log.v (TAG,"Recipe Name -->"+baking.getName ());
+            int baking_id = intent.getIntExtra (BAKING_ID,0);
+            Log.v (TAG, "RECIPE CLICKED-->" + baking_id);
         }
 
-      Baking baking = intent.getParcelableExtra (BAKING_KEY);
-        Log.v(TAG,"baking--->"+baking);
-        Log.v (TAG,"Recipe Name -->"+baking.getName ());
-        int baking_id = intent.getIntExtra (BAKING_ID,0);
-        Log.v (TAG, "RECIPE CLICKED-->" + baking_id);
         populateUI(baking);
-
-
         // Create a new recipeFragment
         RecipeFragment recipeFragment = new RecipeFragment (baking);
 

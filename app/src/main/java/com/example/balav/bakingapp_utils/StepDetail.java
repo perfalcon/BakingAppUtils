@@ -1,6 +1,7 @@
 package com.example.balav.bakingapp_utils;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StepDetail extends AppCompatActivity implements View.OnClickListener {
@@ -37,20 +39,30 @@ public class StepDetail extends AppCompatActivity implements View.OnClickListene
     private  int current_position;
     private  List <Step> listSteps;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate (savedInstanceState);
         Log.v(TAG,"in Step Detail");
         setContentView (R.layout.step_detail);
-        Intent intent = getIntent ();
-        if (intent == null) {
-            //closeOnError ();
-        }
+        int step_id=0;
 
-        int step_id = intent.getIntExtra (STEP_ID,0);
-        Log.v (TAG, "Step CLICKED-->" + step_id);
+        if(savedInstanceState!=null){
+            Log.v (TAG, "Restoring State");
+            if (savedInstanceState.containsKey (STEP_KEY)) {
+                step_id = savedInstanceState.getInt (STEP_ID);
+                listSteps =savedInstanceState.getParcelableArrayList (STEP_KEY);
+            }
+        }else{
+            Intent intent = getIntent ();
+            if (intent == null) {
+                //closeOnError ();
+            }
+            step_id = intent.getIntExtra (STEP_ID,0);
+            Log.v (TAG, "Step CLICKED-->" + step_id);
+            listSteps = intent.getParcelableArrayListExtra (STEP_KEY);
+        }
         current_position =step_id;
-        listSteps = intent.getParcelableArrayListExtra (STEP_KEY);
         Log.v(TAG,"step--->"+listSteps.get (step_id));
         Log.v (TAG,"Step Name -->"+listSteps.get (step_id).getShortDescription ());
         populateUI(listSteps.get (step_id));
@@ -58,8 +70,13 @@ public class StepDetail extends AppCompatActivity implements View.OnClickListene
 
     private void populateUI(Step step) {
         Log.v(TAG,"Calling Populate UI -->"+step.toString ());
-        TextView mRecipeName = (TextView) findViewById(R.id.tv_step_description);
-        mRecipeName.setText(step.getDescription ());
+        if(!isLandScape ()){
+            TextView mRecipeName = (TextView) findViewById(R.id.tv_step_description);
+            mRecipeName.setText(step.getDescription ());
+            // Initialize the buttons with the composers names.
+            mButtons = initializeButtons();
+        }
+
         // Initialize the player view.
         mPlayerView = (SimpleExoPlayerView) findViewById(R.id.playerView);
         Log.v (TAG,"The Video-->"+step.getVideoURL ());
@@ -68,8 +85,7 @@ public class StepDetail extends AppCompatActivity implements View.OnClickListene
             Log.v (TAG,"Updating the Video-->"+step.getVideoURL ());
             initializePlayer(Uri.parse(step.getVideoURL ()));
         }
-        // Initialize the buttons with the composers names.
-        mButtons = initializeButtons();
+
 
     }
     /**
@@ -114,6 +130,15 @@ public class StepDetail extends AppCompatActivity implements View.OnClickListene
         releasePlayer();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState (outState);
+        super.onSaveInstanceState (outState);
+        Log.v (TAG, "Saving the State");
+        outState.putInt (STEP_ID,current_position);
+        outState.putIntegerArrayList (STEP_KEY,(ArrayList)listSteps);
+    }
+
     /**
      * Initializes the button to the correct views, and sets the text to the composers names,
      * and set's the OnClick listener to the buttons.
@@ -155,4 +180,11 @@ public class StepDetail extends AppCompatActivity implements View.OnClickListene
        // mExoPlayer=null;
         populateUI(listSteps.get (current_position));
     }
+    public boolean isLandScape(){
+        return (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        /*if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            //Do some stuff
+        }*/
+    }
 }
+
